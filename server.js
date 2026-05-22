@@ -8,13 +8,20 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', (socket) => {
     console.log('A user connected');
 
-    // Put the user into their specific room code channel
     socket.on('join room', (roomCode) => {
+        // Leave all previous rooms except the default socket.id room
+        const currentRooms = Array.from(socket.rooms);
+        currentRooms.forEach((room) => {
+            if (room !== socket.id) {
+                socket.leave(room);
+            }
+        });
+
+        // Join the new room
         socket.join(roomCode);
         console.log(`User joined room: ${roomCode}`);
     });
 
-    // Listen for a message and only send it to that specific room code
     socket.on('chat message', (data) => {
         io.to(data.room).emit('chat message', { user: data.user, text: data.text });
     });
