@@ -3,16 +3,20 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-// Serve the HTML file to anyone who visits the site
 app.use(express.static(__dirname + '/public'));
 
 io.on('connection', (socket) => {
     console.log('A user connected');
 
-    // Listen for a message from a user
+    // Put the user into their specific room code channel
+    socket.on('join room', (roomCode) => {
+        socket.join(roomCode);
+        console.log(`User joined room: ${roomCode}`);
+    });
+
+    // Listen for a message and only send it to that specific room code
     socket.on('chat message', (data) => {
-        // Send the message to everyone else
-        io.emit('chat message', data);
+        io.to(data.room).emit('chat message', { user: data.user, text: data.text });
     });
 
     socket.on('disconnect', () => {
@@ -20,7 +24,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// Start the server
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
