@@ -32,7 +32,7 @@
         #input { flex: 1; padding: 15px; border-radius: 6px; font-size: 1em; outline: none; transition: background 0.3s, border 0.3s; }
         #send-btn { border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
 
-        /* THEME 1: CYBERPUNK (Default) */
+        /* THEME 1: CYBERPUNK */
         body.theme-cyberpunk { font-family: 'Courier New', monospace; background: #0d0e15; color: #00ffcc; }
         .theme-cyberpunk #theme-selector-container { background: #161925; border-bottom: 1px solid #ff0055; }
         .theme-cyberpunk #theme-select { background: #161925; color: #00ffcc; border: 1px solid #00ffcc; }
@@ -65,6 +65,30 @@
         body.theme-midnight #input:focus { border-color: #9d4edd; }
         body.theme-midnight #send-btn { background: #7b2cbf; color: white; }
         body.theme-midnight #send-btn:hover { background: #5a189a; }
+
+        /* THEME 4: SUNSET WARMTH (Warm Colors) */
+        body.theme-warm { font-family: sans-serif; background: #2b1a1a; color: #fceade; }
+        body.theme-warm #theme-selector-container { background: #3d2525; border-bottom: 1px solid #e76f51; }
+        body.theme-warm #theme-select { background: #2b1a1a; color: #fceade; border: 1px solid #e76f51; }
+        body.theme-warm .message { background: #3d2525; border-radius: 8px; border-right: 3px solid #f4a261; }
+        body.theme-warm .username { color: #e76f51; }
+        body.theme-warm #form { background: #2b1a1a; }
+        body.theme-warm #input { background: #3d2525; border: 1px solid #543434; color: #fceade; }
+        body.theme-warm #input:focus { border-color: #e76f51; }
+        body.theme-warm #send-btn { background: #e76f51; color: white; }
+        body.theme-warm #send-btn:hover { background: #d65d40; }
+
+        /* THEME 5: GLACIER COOL (Cool Colors) */
+        body.theme-cool { font-family: sans-serif; background: #131b23; color: #e0f2f1; }
+        body.theme-cool #theme-selector-container { background: #1d2a36; border-bottom: 1px solid #4ea8de; }
+        body.theme-cool #theme-select { background: #131b23; color: #e0f2f1; border: 1px solid #4ea8de; }
+        body.theme-cool .message { background: #1d2a36; border-radius: 8px; border-left: 3px solid #4ea8de; }
+        body.theme-cool .username { color: #72efdd; }
+        body.theme-cool #form { background: #131b23; }
+        body.theme-cool #input { background: #1d2a36; border: 1px solid #2c3e50; color: #e0f2f1; }
+        body.theme-cool #input:focus { border-color: #4ea8de; }
+        body.theme-cool #send-btn { background: #4ea8de; color: #131b23; }
+        body.theme-cool #send-btn:hover { background: #56cfe1; }
     </style>
 </head>
 <body class="theme-cyberpunk">
@@ -75,6 +99,8 @@
             <option value="theme-cyberpunk">Cyberpunk Neon</option>
             <option value="theme-forest">Minimalist Forest</option>
             <option value="theme-midnight">Midnight AMOLED</option>
+            <option value="theme-warm">Sunset Warmth</option>
+            <option value="theme-cool">Glacier Cool</option>
         </select>
     </div>
 
