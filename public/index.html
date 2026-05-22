@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; background: #2f3136; color: #dcddde; display: flex; flex-direction: column; height: 100vh; }
+        #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .message { background: #40444b; padding: 10px; border-radius: 5px; max-width: 70%; word-break: break-word; }
+        .username { font-weight: bold; color: #00aff4; margin-bottom: 3px; font-size: 0.9em; }
+        #form { display: flex; padding: 20px; background: #2f3136; gap: 10px; }
+        #input { flex: 1; background: #40444b; border: none; padding: 15px; border-radius: 8px; color: white; font-size: 1em; outline: none; }
+        #send-btn { background: #5865f2; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        #send-btn:hover { background: #4752c4; }
+    </style>
+</head>
+<body>
+
+    <div id="chat-box"></div>
+
+    <form id="form" action="">
+        <input id="input" autocomplete="off" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const chatBox = document.getElementById('chat-box');
+
+        // Ask for a temporary handle when joining
+        const username = prompt("Enter a username:") || "Anonymous";
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value.trim()) {
+                // Send username and text to the server
+                socket.emit('chat message', { user: username, text: input.value });
+                input.value = '';
+            }
+        });
+
+        // Listen for messages from the server
+        socket.on('chat message', (data) => {
+            const item = document.createElement('div');
+            item.classList.add('message');
+            item.innerHTML = `<div class="username">${data.user}</div><div>${data.text}</div>`;
+            chatBox.appendChild(item);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to bottom
+        });
+    </script>
+</body>
+</html>
