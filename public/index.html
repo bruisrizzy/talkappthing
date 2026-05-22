@@ -11,12 +11,17 @@
             display: flex; flex-direction: column; height: 100vh; 
             transition: background 0.3s, color 0.3s;
         }
-        #theme-selector-container {
+        #header-container {
             padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        #theme-selector-container {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.9em;
         }
         #theme-select {
             padding: 5px 10px;
@@ -24,6 +29,9 @@
             cursor: pointer;
             font-family: inherit;
             outline: none;
+        }
+        #room-display {
+            font-weight: bold;
         }
         #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .message { padding: 12px; border-radius: 6px; max-width: 75%; word-break: break-word; transition: background 0.3s; }
@@ -34,7 +42,7 @@
 
         /* THEME 1: CYBERPUNK */
         body.theme-cyberpunk { font-family: 'Courier New', monospace; background: #0d0e15; color: #00ffcc; }
-        .theme-cyberpunk #theme-selector-container { background: #161925; border-bottom: 1px solid #ff0055; }
+        .theme-cyberpunk #header-container { background: #161925; border-bottom: 1px solid #ff0055; }
         .theme-cyberpunk #theme-select { background: #161925; color: #00ffcc; border: 1px solid #00ffcc; }
         .theme-cyberpunk .message { background: #161925; border-left: 3px solid #ff0055; border-radius: 4px; }
         .theme-cyberpunk .username { color: #ff0055; text-transform: uppercase; }
@@ -45,7 +53,7 @@
 
         /* THEME 2: FOREST */
         body.theme-forest { font-family: sans-serif; background: #1f2321; color: #e1e7e4; }
-        body.theme-forest #theme-selector-container { background: #2a302c; }
+        body.theme-forest #header-container { background: #2a302c; }
         body.theme-forest #theme-select { background: #1f2321; color: #e1e7e4; border: 1px solid #4e6557; }
         body.theme-forest .message { background: #2a302c; border-radius: 8px; }
         body.theme-forest .username { color: #8fa89b; }
@@ -56,7 +64,7 @@
 
         /* THEME 3: MIDNIGHT */
         body.theme-midnight { font-family: sans-serif; background: #000000; color: #ffffff; }
-        body.theme-midnight #theme-selector-container { background: #0a0a0a; border-bottom: 1px solid #222; }
+        body.theme-midnight #header-container { background: #0a0a0a; border-bottom: 1px solid #222; }
         body.theme-midnight #theme-select { background: #0a0a0a; color: white; border: 1px solid #333; }
         body.theme-midnight .message { background: #0a0a0a; border: 1px solid #222; }
         body.theme-midnight .username { color: #9d4edd; }
@@ -66,9 +74,9 @@
         body.theme-midnight #send-btn { background: #7b2cbf; color: white; }
         body.theme-midnight #send-btn:hover { background: #5a189a; }
 
-        /* THEME 4: SUNSET WARMTH (Warm Colors) */
+        /* THEME 4: SUNSET WARMTH */
         body.theme-warm { font-family: sans-serif; background: #2b1a1a; color: #fceade; }
-        body.theme-warm #theme-selector-container { background: #3d2525; border-bottom: 1px solid #e76f51; }
+        body.theme-warm #header-container { background: #3d2525; border-bottom: 1px solid #e76f51; }
         body.theme-warm #theme-select { background: #2b1a1a; color: #fceade; border: 1px solid #e76f51; }
         body.theme-warm .message { background: #3d2525; border-radius: 8px; border-right: 3px solid #f4a261; }
         body.theme-warm .username { color: #e76f51; }
@@ -78,9 +86,9 @@
         body.theme-warm #send-btn { background: #e76f51; color: white; }
         body.theme-warm #send-btn:hover { background: #d65d40; }
 
-        /* THEME 5: GLACIER COOL (Cool Colors) */
+        /* THEME 5: GLACIER COOL */
         body.theme-cool { font-family: sans-serif; background: #131b23; color: #e0f2f1; }
-        body.theme-cool #theme-selector-container { background: #1d2a36; border-bottom: 1px solid #4ea8de; }
+        body.theme-cool #header-container { background: #1d2a36; border-bottom: 1px solid #4ea8de; }
         body.theme-cool #theme-select { background: #131b23; color: #e0f2f1; border: 1px solid #4ea8de; }
         body.theme-cool .message { background: #1d2a36; border-radius: 8px; border-left: 3px solid #4ea8de; }
         body.theme-cool .username { color: #72efdd; }
@@ -93,15 +101,18 @@
 </head>
 <body class="theme-cyberpunk">
 
-    <div id="theme-selector-container">
-        <label for="theme-select">Theme:</label>
-        <select id="theme-select">
-            <option value="theme-cyberpunk">Cyberpunk Neon</option>
-            <option value="theme-forest">Minimalist Forest</option>
-            <option value="theme-midnight">Midnight AMOLED</option>
-            <option value="theme-warm">Sunset Warmth</option>
-            <option value="theme-cool">Glacier Cool</option>
-        </select>
+    <div id="header-container">
+        <div id="room-display">Room: Connecting...</div>
+        <div id="theme-selector-container">
+            <label for="theme-select">Theme:</label>
+            <select id="theme-select">
+                <option value="theme-cyberpunk">Cyberpunk Neon</option>
+                <option value="theme-forest">Minimalist Forest</option>
+                <option value="theme-midnight">Midnight AMOLED</option>
+                <option value="theme-warm">Sunset Warmth</option>
+                <option value="theme-cool">Glacier Cool</option>
+            </select>
+        </div>
     </div>
 
     <div id="chat-box"></div>
@@ -118,10 +129,15 @@
         const input = document.getElementById('input');
         const chatBox = document.getElementById('chat-box');
         const themeSelect = document.getElementById('theme-select');
+        const roomDisplay = document.getElementById('room-display');
 
         const username = prompt("Enter a username:") || "Anonymous";
+        const roomCode = prompt("Enter a Room Code or Name:") || "General";
 
-        // Listen for dropdown menu changes to swap styles
+        // Tell the server we want to join this specific room code
+        socket.emit('join room', roomCode);
+        roomDisplay.textContent = `Room: ${roomCode}`;
+
         themeSelect.addEventListener('change', (e) => {
             document.body.className = e.target.value;
         });
@@ -129,7 +145,8 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value.trim()) {
-                socket.emit('chat message', { user: username, text: input.value });
+                // Send the message along with the target room code
+                socket.emit('chat message', { room: roomCode, user: username, text: input.value });
                 input.value = '';
             }
         });
