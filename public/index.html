@@ -5,31 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Private Chat</title>
     <style>
+        /* Base Setup */
         body { 
-            margin: 0; padding: 0; font-family: 'Courier New', monospace; 
-            background: #0d0e15; color: #00ffcc; 
+            margin: 0; padding: 0; 
             display: flex; flex-direction: column; height: 100vh; 
+            transition: background 0.3s, color 0.3s;
+        }
+        #theme-selector-container {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        #theme-select {
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            outline: none;
         }
         #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { 
-            background: #161925; padding: 12px; border-radius: 4px; 
-            border-left: 3px solid #ff0055; max-width: 75%; word-break: break-word; 
-        }
-        .username { font-weight: bold; color: #ff0055; margin-bottom: 5px; text-transform: uppercase; }
-        #form { display: flex; padding: 20px; background: #0d0e15; gap: 10px; }
-        #input { 
-            flex: 1; background: #161925; border: 1px solid #00ffcc; 
-            padding: 15px; border-radius: 4px; color: #00ffcc; font-size: 1em; outline: none; 
-        }
-        #input::placeholder { color: #00ffcc; opacity: 0.5; }
-        #send-btn { 
-            background: #ff0055; color: white; border: none; 
-            padding: 0 20px; border-radius: 4px; font-weight: bold; cursor: pointer; 
-        }
-        #send-btn:hover { background: #cc0044; }
+        .message { padding: 12px; border-radius: 6px; max-width: 75%; word-break: break-word; transition: background 0.3s; }
+        .username { font-weight: bold; margin-bottom: 5px; }
+        #form { display: flex; padding: 20px; gap: 10px; }
+        #input { flex: 1; padding: 15px; border-radius: 6px; font-size: 1em; outline: none; transition: background 0.3s, border 0.3s; }
+        #send-btn { border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+
+        /* THEME 1: CYBERPUNK (Default) */
+        body.theme-cyberpunk { font-family: 'Courier New', monospace; background: #0d0e15; color: #00ffcc; }
+        .theme-cyberpunk #theme-selector-container { background: #161925; border-bottom: 1px solid #ff0055; }
+        .theme-cyberpunk #theme-select { background: #161925; color: #00ffcc; border: 1px solid #00ffcc; }
+        .theme-cyberpunk .message { background: #161925; border-left: 3px solid #ff0055; border-radius: 4px; }
+        .theme-cyberpunk .username { color: #ff0055; text-transform: uppercase; }
+        .theme-cyberpunk #form { background: #0d0e15; }
+        .theme-cyberpunk #input { background: #161925; border: 1px solid #00ffcc; color: #00ffcc; }
+        .theme-cyberpunk #send-btn { background: #ff0055; color: white; }
+        .theme-cyberpunk #send-btn:hover { background: #cc0044; }
+
+        /* THEME 2: FOREST */
+        body.theme-forest { font-family: sans-serif; background: #1f2321; color: #e1e7e4; }
+        body.theme-forest #theme-selector-container { background: #2a302c; }
+        body.theme-forest #theme-select { background: #1f2321; color: #e1e7e4; border: 1px solid #4e6557; }
+        body.theme-forest .message { background: #2a302c; border-radius: 8px; }
+        body.theme-forest .username { color: #8fa89b; }
+        body.theme-forest #form { background: #1f2321; }
+        body.theme-forest #input { background: #2a302c; border: none; color: #e1e7e4; }
+        body.theme-forest #send-btn { background: #4e6557; color: #e1e7e4; }
+        body.theme-forest #send-btn:hover { background: #3d5045; }
+
+        /* THEME 3: MIDNIGHT */
+        body.theme-midnight { font-family: sans-serif; background: #000000; color: #ffffff; }
+        body.theme-midnight #theme-selector-container { background: #0a0a0a; border-bottom: 1px solid #222; }
+        body.theme-midnight #theme-select { background: #0a0a0a; color: white; border: 1px solid #333; }
+        body.theme-midnight .message { background: #0a0a0a; border: 1px solid #222; }
+        body.theme-midnight .username { color: #9d4edd; }
+        body.theme-midnight #form { background: #000000; }
+        body.theme-midnight #input { background: #0a0a0a; border: 1px solid #333; color: white; }
+        body.theme-midnight #input:focus { border-color: #9d4edd; }
+        body.theme-midnight #send-btn { background: #7b2cbf; color: white; }
+        body.theme-midnight #send-btn:hover { background: #5a189a; }
     </style>
 </head>
-<body>
+<body class="theme-cyberpunk">
+
+    <div id="theme-selector-container">
+        <label for="theme-select">Theme:</label>
+        <select id="theme-select">
+            <option value="theme-cyberpunk">Cyberpunk Neon</option>
+            <option value="theme-forest">Minimalist Forest</option>
+            <option value="theme-midnight">Midnight AMOLED</option>
+        </select>
+    </div>
 
     <div id="chat-box"></div>
 
@@ -44,8 +91,14 @@
         const form = document.getElementById('form');
         const input = document.getElementById('input');
         const chatBox = document.getElementById('chat-box');
+        const themeSelect = document.getElementById('theme-select');
 
         const username = prompt("Enter a username:") || "Anonymous";
+
+        // Listen for dropdown menu changes to swap styles
+        themeSelect.addEventListener('change', (e) => {
+            document.body.className = e.target.value;
+        });
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
